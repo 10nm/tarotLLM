@@ -24,12 +24,14 @@ slide = prs.slides.add_slide(blank)
 
 for i in range(0, 22):
     num = str(i)
+    num_reverse = str(i+22)
     nameEN = df.iloc[i,1]
     nameJA = df.iloc[i,2]
     
     print(i,nameEN)
 
-    # generate datamatrix with number "i"
+    # generate datamatrix(正位置) with number "i"
+    # number: 0-21
     encoder = DataMatrixEncoder(num)
     encoder.save(f"temp.png")
 
@@ -41,6 +43,18 @@ for i in range(0, 22):
         width=Inches(0.5), height=Inches(0.5)
     )
 
+    # generate datamatrix(逆位置) with number "i + 22"  
+    # number: 22 - 43
+    encoder = DataMatrixEncoder(num_reverse)
+    encoder.save(f"tempRV.png")
+
+    slide.shapes.add_picture(
+        "tempRV.png",
+        left=Inches(1.225), top=Inches(2.65),
+        width=Inches(0.5), height=Inches(0.5)
+    )
+
+
     # add text
     title = slide.shapes.add_textbox(
         left=Cm(0), top=Cm(0),
@@ -51,7 +65,7 @@ for i in range(0, 22):
     text_frame.vertical_anchor = MSO_ANCHOR.MIDDLE  # テキストボックス全体を中央揃えに設定
 
     p = text_frame.add_paragraph()
-    p.text = nameEN
+    p.text = (str(i) + " "  + str(nameEN))
     p.font.name = "Arial"
     p.font.size = Pt(12)
     p.font.bold = True
